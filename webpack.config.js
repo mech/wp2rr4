@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var postcssOptions = {
   plugins: function() {
@@ -74,19 +75,14 @@ module.exports = {
         ]
       }
     ]
-    // loaders: [
-    //   {
-    //     test: /\.css$/,
-    //     loader: 'style-loader!css-loader!postcss-loader'
-    //   }
-    // ]
   },
 
   plugins: [
     new webpack.NamedModulesPlugin(), // Making update messages look nicer - https://github.com/ericclemmons/webpack-hot-server-example/pull/7
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.css$/,
+    new HtmlWebpackPlugin({
+      hash: false,
+      template: './index.html'
     })
   ]
 }
