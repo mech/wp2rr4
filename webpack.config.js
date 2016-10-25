@@ -1,73 +1,70 @@
 var path = require('path')
 var webpack = require('webpack')
 
-module.exports = {
-  entry: {
-    app: [
-      'babel-polyfill',
-      'webpack-dev-server/client?http://localhost:3000',
-      'webpack/hot/only-dev-server',
-      './app/index.jsx'
-    ]
-  },
-
-  output: {
-    path: path.join(__dirname, 'server/public'),
-    filename: 'js/[name]-[chunkhash:8].js',
-    publicPath: '/'
-  },
-
-  devtool: 'source-map',
-
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        include: path.join(__dirname, 'app'),
-        loader: 'babel-loader',
-        query: {
-          'presets': ['es2015', 'stage-0', 'react']
-        }
-      },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader'
-      }
-    ]
-  },
-
-  plugins: [
-    new webpack.NamedModulesPlugin(), // https://github.com/ericclemmons/webpack-hot-server-example/pull/7
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.css$/,
-    })
-  ]
-}
-
-
-// https://github.com/webpack/extract-text-webpack-plugin/issues/265
-// https://github.com/postcss/postcss-loader
-// https://github.com/postcss/postcss-loader/issues/99
-
-var postcssOptions =  {
+var postcssOptions = {
   plugins: function() {
     return [
-      require('autoprefixer')
+      require('postcss-cssnext')
     ]
   }
 }
 
 module.exports = {
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css']
+  },
+
+  entry: {
+    app: [
+      'babel-polyfill',
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/only-dev-server',
+      'react-hot-loader/patch',
+      './app/index.jsx'
+    ]
+  },
+
+  output: {
+    filename: 'js/[name]-[hash:8].js',
+    path: path.join(__dirname, 'server/public'),
+    publicPath: '/'
+  },
+
+  // inline-source-map
+  // eval-source-map
+  // hidden-source-map
+  // cheap-source-map
+  // cheap-module-source-map
+  // eval
+  devtool: 'source-map',
+  target: 'web',
+  context: __dirname,
+
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
+        include: path.join(__dirname, 'app'),
+        loader: 'eslint-loader',
+        enforce: 'pre' // Replaces preLoaders
       },
+
+      {
+        test: /\.jsx?$/,
+        include: path.join(__dirname, 'app'),
+        loader: 'babel-loader',
+        query: {
+          cacheDirectory: true // ?
+          // presets: ['es2015', 'stage-0', 'react'],
+          // plugins: ['react-hot-loader/babel']
+        }
+      },
+
       {
         test: /\.json$/,
         loader: 'json-loader'
       },
+
       {
         test: /\.css$/,
         use: [
@@ -77,5 +74,23 @@ module.exports = {
         ]
       }
     ]
-  }
+    // loaders: [
+    //   {
+    //     test: /\.css$/,
+    //     loader: 'style-loader!css-loader!postcss-loader'
+    //   }
+    // ]
+  },
+
+  plugins: [
+    new webpack.NamedModulesPlugin(), // Making update messages look nicer - https://github.com/ericclemmons/webpack-hot-server-example/pull/7
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.css$/,
+    })
+  ]
 }
+
+// https://github.com/webpack/extract-text-webpack-plugin/issues/265
+// https://github.com/postcss/postcss-loader
+// https://github.com/postcss/postcss-loader/issues/99
