@@ -1,6 +1,7 @@
-var path = require('path')
-var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
+const webpack = require('webpack')
+const webpackValidator = require('webpack-validator')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var postcssOptions = {
   plugins: function() {
@@ -10,7 +11,7 @@ var postcssOptions = {
   }
 }
 
-module.exports = {
+config = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
   },
@@ -28,7 +29,8 @@ module.exports = {
   output: {
     filename: 'js/[name]-[hash:8].js',
     path: path.join(__dirname, 'server/public'),
-    publicPath: '/'
+    publicPath: '/',
+    pathinfo: true
   },
 
   // inline-source-map
@@ -37,6 +39,7 @@ module.exports = {
   // cheap-source-map
   // cheap-module-source-map
   // eval
+  // source-map for production
   devtool: 'source-map',
   target: 'web',
   context: __dirname,
@@ -77,6 +80,18 @@ module.exports = {
     ]
   },
 
+  // Old??
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        include: path.join(__dirname, 'app'),
+        loaders: ['babel'],
+        exclude: /node_module/
+      }
+    ]
+  },
+
   plugins: [
     new webpack.NamedModulesPlugin(), // Making update messages look nicer - https://github.com/ericclemmons/webpack-hot-server-example/pull/7
     new webpack.HotModuleReplacementPlugin(),
@@ -85,6 +100,11 @@ module.exports = {
       template: './index.html'
     })
   ]
+}
+
+module.exports = env => {
+  // return webpackValidator(config)
+  return config
 }
 
 // https://github.com/webpack/extract-text-webpack-plugin/issues/265
