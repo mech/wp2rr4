@@ -72,25 +72,26 @@ config = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          { loader: 'style-loader' },
           { loader: 'css-loader', options: { importLoaders: 1 } },
-          { loader: 'postcss-loader', options: postcssOptions }
+          { loader: 'postcss-loader' }
+          // { loader: 'postcss-loader', options: postcssOptions }
         ]
       }
     ]
   },
 
   // Old??
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        include: path.join(__dirname, 'app'),
-        loaders: ['babel'],
-        exclude: /node_module/
-      }
-    ]
-  },
+  // module: {
+  //   loaders: [
+  //     {
+  //       test: /\.jsx?$/,
+  //       include: path.join(__dirname, 'app'),
+  //       loaders: ['babel'],
+  //       exclude: /node_module/
+  //     }
+  //   ]
+  // },
 
   plugins: [
     new webpack.NamedModulesPlugin(), // Making update messages look nicer - https://github.com/ericclemmons/webpack-hot-server-example/pull/7
