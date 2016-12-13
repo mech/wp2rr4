@@ -3,14 +3,6 @@ const webpack = require('webpack')
 const webpackValidator = require('webpack-validator')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-var postcssOptions = {
-  plugins: function() {
-    return [
-      require('postcss-cssnext')
-    ]
-  }
-}
-
 config = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css']
@@ -75,7 +67,6 @@ config = {
           { loader: 'style-loader' },
           { loader: 'css-loader', options: { importLoaders: 1 } },
           { loader: 'postcss-loader' }
-          // { loader: 'postcss-loader', options: postcssOptions }
         ]
       }
     ]
