@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter, Match, Link } from 'react-router'
+import { BrowserRouter, Match } from 'react-router'
 import Login from './Login'
+import Yolo from './Yolo'
+import Employment from './Employment'
+// import Topic from './Topic'
+// import BasicExample from './BasicExample'
 
 class App extends Component {
   constructor(props) {
@@ -9,19 +13,18 @@ class App extends Component {
     this.state = {
     }
 
-    console.log(props)
+    // console.log(props)
   }
 
   render() {
+    // return <BasicExample />
     return (
       <BrowserRouter>
         <div>
-          <h1>Yolo 世界</h1>
-          <ul>
-            <li><Link to="/login">Login</Link></li>
-          </ul>
-
+          <Match exactly pattern="/" component={Yolo} />
           <Match exactly pattern="/login" component={Login} />
+          <Match pattern="/e" component={Employment} />
+          {/* <Match pattern="/e/:id" component={Topic} /> */}
         </div>
       </BrowserRouter>
     )
