@@ -35,6 +35,9 @@ config = {
   devtool: 'source-map',
   target: 'web',
   context: __dirname,
+  performance: {
+    hints: false
+  },
 
   module: {
     rules: [
